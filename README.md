@@ -1,1 +1,1 @@
-this is our gps project
+This is our gps project.
