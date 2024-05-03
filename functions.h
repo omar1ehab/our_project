@@ -7,10 +7,10 @@ while ((SYSCTL_RCGCUART_R |= 0x01)==0);
 SYSCTL_RCGCGPIO_R |= 0x01;
 while ((SYSCTL_RCGCGPIO_R |= 0x01)==0);
 UART0_CTL_R &= ~0x01;
-UART0_IBRD_R = 104; // IBRD=int (80000000/ (16*9600) ) = int (520.8333)
-UART0_FBRD_R = 11; // FBRD = int (0.8333* 64 + 0.5)
+UART0_IBRD_R = 104; // IBRD=int (16*1e6/ (16*9600) ) = int (104.16666)
+UART0_FBRD_R = 11; // FBRD = int (0.1667* 64 + 0.5)
 UART0_LCRH_R = 0x0070; // 8-bit word length, enable FIFO 001110000
-UART0_CTL_R = 0x0301; // enable RXE, TXE and UART 001100000001
+UART0_CTL_R = 0x0301; // enable UARTenable,RXE, TXE and UART 001100000001
 GPIO_PORTA_AFSEL_R |= 0x03; // enable alt function PAO , PA1
 GPIO_PORTA_PCTL_R = 0x11; 
 GPIO_PORTA_DEN_R |= 0x03; // enable digital I/O on PA0, PA1
@@ -29,8 +29,8 @@ bool ready_to_send (void){
 }
 
 
-char UART0_reed(void){
-while (!ready_to_recieve());  // will not reed data till tiva is ready to receive (fifo is not empty)
+char UART0_read(void){
+while (!ready_to_recieve());  // will not read data till tiva is ready to receive (fifo is not empty)
 	return (char) (UART0_DR_R);
 
 }
@@ -55,7 +55,7 @@ SYSCTL_RCGCGPIO_R  |=0x20;
 while ((SYSCTL_PRGPIO_R & 0x20)==0 );
 	
 GPIO_PORTF_LOCK_R  =0x4C4F434B ;
-GPIO_PORTF_CR_R = 0x1f ;
+GPIO_PORTF_CR_R = 0x1F;
 GPIO_PORTF_AFSEL_R = 0x00;
 GPIO_PORTF_AMSEL_R = 0x00;
 GPIO_PORTF_DIR_R   = 0x0E;
