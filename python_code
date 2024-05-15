@@ -1,0 +1,45 @@
+import folium
+
+# Function to read longitude and latitude from text file
+def read_lon_lat_from_text(text_file):
+    latitudes = []
+    longitudes = []
+    with open(text_file, 'r') as file:
+        for line in file:
+            # Check if the line contains a comma
+            if ',' in line:
+                # Split each line by comma
+                lon, lat = line.strip().split(',')
+                longitudes.append(float(lon))
+                latitudes.append(float(lat))
+            else:
+                print("Skipping line:", line.strip())  # Print a message or handle the case where there's no comma
+    return latitudes, longitudes
+
+# Main function
+def main():
+    # Path to the text file
+    text_file = "C:\\Users\\Public\\Security Sessions\\hope.txt"
+
+    # Read longitude and latitude from text file
+    latitudes, longitudes = read_lon_lat_from_text(text_file)
+
+    # Create a map centered at the mean latitude and longitude
+    map_center = [sum(latitudes)/len(latitudes), sum(longitudes)/len(longitudes)]
+    m = folium.Map(location=map_center, zoom_start=10)
+
+    # Add markers for each coordinate
+    for lat, lon in zip(latitudes, longitudes):
+        folium.Marker([lat, lon]).add_to(m)
+
+    # Add a PolyLine to connect the markers
+    folium.PolyLine(list(zip(latitudes, longitudes)), color="blue").add_to(m)
+
+    # Save the map to an HTML file
+    m.save('map_with_path.html')
+
+    # Display a message indicating that the HTML file has been generated
+    print("Map saved as 'map_with_path.html'. Open this file in a web browser to view the map with the path.")
+
+if __name__ == "__main__":
+    main()
