@@ -1,15 +1,23 @@
-#include "stdio.h"
-#include "functions.h"
+#include "our_F.h"
 #include "tm4c123gh6pm.h"
-#include "stdbool.h"
-int main()
+#include <string.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <math.h> 
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
 {
-char char_in;
-UART_init();
-PORTF_init ();
+UART_Init0();
+PORTD_Init();
+SysTick_Init();
+RGB_Init();
+loopp();
+UART_outString("programm is over ");
+GPIO_PORTF_DATA_R =0x05;
+
 	
-while (1)
-{
-	char distane =measure_distance();
-	if (distane==0x64) GPIO_PORTF_DATA_R =0x02; // if distance =100m ...turn on red led
-}}
+	
+	
+}
